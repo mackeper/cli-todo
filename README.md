@@ -10,7 +10,7 @@ $$ |      $$ |$$ |         $$ |$$\ $$ |  $$ |$$ |  $$ |$$ |  $$ |
 ``` 
 <div align="center">
 
-![C# workflow](https://github.com/mackeper/marcus-playground-backend/actions/workflows/dotnet.yml/badge.svg)
+[![Rust](https://github.com/mackeper/cli-todo/actions/workflows/rust.yml/badge.svg)](https://github.com/mackeper/cli-todo/actions/workflows/rust.yml)
 ![GitHub all releases](https://img.shields.io/github/downloads/mackeper/cli-todo/total)
 ![GitHub](https://img.shields.io/github/license/mackeper/cli-todo)
 
