@@ -8,7 +8,8 @@ $$ |      $$ |$$ |         $$ |$$\ $$ |  $$ |$$ |  $$ |$$ |  $$ |
 \$$$$$$$\ $$ |$$ |         \$$$$  |\$$$$$$  |\$$$$$$$ |\$$$$$$  |
  \_______|\__|\__|          \____/  \______/  \_______| \______/ 
 ``` 
-<div align="center">                                                                                                            
+<div align="center">
+
 ![C# workflow](https://github.com/mackeper/marcus-playground-backend/actions/workflows/dotnet.yml/badge.svg)
 ![GitHub all releases](https://img.shields.io/github/downloads/mackeper/cli-todo/total)
 ![GitHub](https://img.shields.io/github/license/mackeper/cli-todo)
@@ -20,8 +21,6 @@ Simple todo list in your command-line :white_check_mark:
 [FAQ](#faq-question) •
 [Support](#support-love_letter)
 
-![Screenshot1](./src/Assets/Screenshot-Script.png)
-![Screenshot1](./src/Assets/Screenshot-AutoClicker.png)
 </div>
 
 ## Installation :coffee:
@@ -44,3 +43,7 @@ Answer 1
 #### Question 2
 
 Answer 2
+
+## Support :love_letter:
+
+Submit an [issue!](https://github.com/mackeper/DesktopAutomation/issues/new?assignees=&labels=question&projects=&template=question.yaml&title=%5BQUESTION%5D+%3Ctitle%3E)
