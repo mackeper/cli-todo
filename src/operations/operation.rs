@@ -1,3 +1,4 @@
+/// Operations that can be performed on the todo list.
 #[derive(Debug)]
 pub enum Operation {
     List,

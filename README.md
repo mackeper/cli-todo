@@ -28,7 +28,7 @@ Simple todo list in your command-line :white_check_mark:
 Download the release
 ### Build :hammer:
 ```
-cargo build
+cargo build --release
 ```
     
 ## Roadmap :world_map:

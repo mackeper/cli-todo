@@ -1,5 +1,20 @@
 use std::io;
 
+/// Error type for operations.
+///
+/// This enum represents the different errors that can occur when performing an operation.
+///
+/// # Variants
+/// * `OutOfRange` - The given index is out of range.
+/// * `IOError` - An IO error occurred.
+///
+/// # Examples
+/// ```
+/// use cli_todo::operations::OperationError;
+/// use std::io;
+///
+/// let err = OperationError::IOError(io::Error::new(io::ErrorKind::Other, "foo"));
+/// ```
 #[derive(Debug)]
 pub enum OperationError {
     OutOfRange,

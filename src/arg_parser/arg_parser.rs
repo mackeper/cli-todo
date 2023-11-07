@@ -1,6 +1,17 @@
 use crate::operations::Operation;
 use crate::arg_parser::ParseError;
 
+/// Parse the command line arguments and return an `Operation` enum.
+///
+/// # Examples
+/// ```
+/// use cli_todo::arg_parser::parse_operation;
+/// use cli_todo::operations::Operation;
+/// use std::env;
+///
+/// let args: Vec<String> = env::args().collect();
+/// let operation = parse_operation(&args).unwrap();
+/// ```
 pub fn parse_operation(op_str: &str, args: &[String]) -> Result<Operation, ParseError> {
     match op_str {
         "list" | "l" => Ok(Operation::List),

@@ -1,10 +1,45 @@
-use crate::operations::OperationError;
 use crate::operations::Operation;
+use crate::operations::OperationError;
 
 use super::list_io::read_file_lines;
 use super::list_io::write_file_lines;
 
+/// Execute the given operation.
+///
+/// # Errors
+/// Returns an error if the operation is invalid or if there is an IO error.
+///
+/// # Examples
+/// ```
+/// use cli_todo::operations::Operation;
+/// use cli_todo::executer::execute;
+///
+/// let operation = Operation::List;
+/// execute(operation).unwrap();
+/// ```
+pub fn execute(operation: Operation) -> Result<(), OperationError> {
+    let mut lines = read_file_lines().map_err(|x| OperationError::IOError(x))?;
+    match operation {
+        Operation::List => {}
+        Operation::Add { item } => add_item(&mut lines, item),
+        Operation::Remove { id } => remove_item(&mut lines, id)?,
+        Operation::Done { id } => toggle_done(&mut lines, id)?,
+        Operation::Clear => lines.clear(),
+    }
+    list_items(&mut lines);
+    write_file_lines(&lines).map_err(|x| OperationError::IOError(x))?;
+    Ok(())
+}
 
+/// Print all items in the list.
+/// 
+/// # Examples
+/// ```
+/// use cli_todo::executer::list_items;
+///
+/// let mut lines = vec!["foo".to_string(), "bar".to_string()];
+/// list_items(&mut lines);
+/// ```
 fn list_items(lines: &mut Vec<String>) {
     for (i, line) in lines.iter().enumerate() {
         println!("{}: {}", i + 1, line);
@@ -37,20 +72,6 @@ fn toggle_done(lines: &mut Vec<String>, id: usize) -> Result<(), OperationError>
     Ok(())
 }
 
-pub fn execute(operation: Operation) -> Result<(), OperationError> {
-    let mut lines = read_file_lines().map_err(|x| OperationError::IOError(x))?;
-    match operation {
-        Operation::List => {}
-        Operation::Add { item } => add_item(&mut lines, item),
-        Operation::Remove { id } => remove_item(&mut lines, id)?,
-        Operation::Done { id } => toggle_done(&mut lines, id)?,
-        Operation::Clear => lines.clear(),
-    }
-    list_items(&mut lines);
-    write_file_lines(&lines).map_err(|x| OperationError::IOError(x))?;
-    Ok(())
-}
-
 #[cfg(test)]
 mod tests {
     #[test]
@@ -63,7 +84,10 @@ mod tests {
     fn add_item() {
         let mut lines = vec!["foo".to_string(), "bar".to_string()];
         super::add_item(&mut lines, "baz".to_string());
-        assert_eq!(lines, vec!["foo".to_string(), "bar".to_string(), "[ ] baz".to_string()]);
+        assert_eq!(
+            lines,
+            vec!["foo".to_string(), "bar".to_string(), "[ ] baz".to_string()]
+        );
     }
 
     #[test]
