@@ -66,4 +66,4 @@ Answer 2
 
 ## Support :love_letter:
 
-Submit an [issue!](https://github.com/mackeper/DesktopAutomation/issues/new?assignees=&labels=question&projects=&template=question.yaml&title=%5BQUESTION%5D+%3Ctitle%3E)
+Submit an [issue!](https://github.com/mackeper/cli-todo/issues/new?assignees=&labels=question&projects=&template=question.yaml&title=%5BQUESTION%5D+%3Ctitle%3E)
