@@ -1,17 +1,8 @@
+use crate::domain::Item;
 use crate::operations::Operation;
 use crate::arg_parser::ParseError;
 
 /// Parse the command line arguments and return an `Operation` enum.
-///
-/// # Examples
-/// ```
-/// use cli_todo::arg_parser::parse_operation;
-/// use cli_todo::operations::Operation;
-/// use std::env;
-///
-/// let args: Vec<String> = env::args().collect();
-/// let operation = parse_operation(&args).unwrap();
-/// ```
 pub fn parse_operation(op_str: &str, args: &[String]) -> Result<Operation, ParseError> {
     match op_str {
         "list" | "l" => Ok(Operation::List),
@@ -19,7 +10,7 @@ pub fn parse_operation(op_str: &str, args: &[String]) -> Result<Operation, Parse
         "add" | "a" => args
             .get(0)
             .ok_or(ParseError::InsufficientArguments)
-            .map(|item| Operation::Add { item: item.clone() }),
+            .map(|item| Operation::Add { item: Item::new(item.clone())}),
 
         "remove" | "r" => args
             .get(0)
@@ -43,6 +34,8 @@ pub fn parse_operation(op_str: &str, args: &[String]) -> Result<Operation, Parse
 
 #[cfg(test)]
 mod tests {
+    use crate::domain::Item;
+
     #[test]
     fn parse_operation_list() {
         let args = vec![];
@@ -64,7 +57,7 @@ mod tests {
         assert_eq!(
             result.unwrap(),
             super::Operation::Add {
-                item: "item".to_string()
+                item: Item::new("item".to_string())
             }
         );
     }
@@ -76,7 +69,7 @@ mod tests {
         assert_eq!(
             result.unwrap(),
             super::Operation::Add {
-                item: "item".to_string()
+                item: Item::new("item".to_string())
             }
         );
     }

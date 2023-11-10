@@ -1,8 +1,10 @@
+use crate::domain::Item;
+
 /// Operations that can be performed on the todo list.
 #[derive(Debug)]
 pub enum Operation {
     List,
-    Add { item: String },
+    Add { item: Item },
     Remove { id: usize },
     Done { id: usize },
     Clear,
@@ -25,6 +27,7 @@ impl PartialEq for Operation {
 #[cfg(test)]
 mod tests {
     use crate::operations::Operation;
+    use crate::domain::Item;
 
 
     #[test]
@@ -36,10 +39,10 @@ mod tests {
     fn eq_add() {
         assert_eq!(
             Operation::Add {
-                item: "foo".to_string()
+                item: Item::new("foo".to_string())
             },
             Operation::Add {
-                item: "foo".to_string()
+                item: Item::new("foo".to_string())
             }
         );
     }
@@ -70,7 +73,7 @@ mod tests {
         assert_ne!(
             Operation::List,
             Operation::Add {
-                item: "foo".to_string()
+                item: Item::new("foo".to_string())
             }
         );
     }

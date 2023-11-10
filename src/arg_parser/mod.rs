@@ -15,9 +15,7 @@
 //!    Operation::List => println!("List operation"),
 //!    Operation::Add { item } => println!("Add operation with item: {}", item),
 //!    Operation::Remove { id } => println!("Remove operation with id: {}", id),
-//!    Operation::Done { id } => println!("Done operation with id: {}", id),
-//!    Operation::Clear => println!("Clear operation"),
-//!    Operation::Help => println!("Help operation"),
+//!    ...
 //! }
 //! ```
 pub mod arg_parser;

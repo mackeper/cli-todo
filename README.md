@@ -56,9 +56,9 @@ cargo build --release
 
 ## FAQ :question:
 
-#### Question 1
-
-Answer 1
+#### Where are the todo lists stored?
+- On Windows: `%localappdata%\cli-todo`
+- On Linux: Coming soon
 
 #### Question 2
 

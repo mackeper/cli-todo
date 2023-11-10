@@ -1,6 +1,8 @@
 use std::fs::OpenOptions;
-use std::io::{self, BufRead, BufReader, Write};
+use std::io::{self, BufReader, Write, Read};
 use std::path::PathBuf;
+
+use crate::domain::List;
 
 fn get_file_path() -> PathBuf {
     if cfg!(target_os = "windows") {
@@ -15,42 +17,31 @@ fn get_file_path() -> PathBuf {
 }
 
 /// Read all lines from the default todo file.
-///
-/// # Examples
-/// ```
-/// use cli_todo::list_io::read_file_lines;
-///
-/// let lines = read_file_lines().unwrap();
-/// ```
-pub fn read_file_lines() -> io::Result<Vec<String>> {
+pub fn read_file_lines() -> io::Result<List> {
     let path = get_file_path();
     let file = OpenOptions::new()
         .read(true)
         .write(true) // Needed to create in windows?
         .create(true)
         .open(path)?;
-    let reader = BufReader::new(file);
-    Ok(reader.lines().filter_map(|l| l.ok()).collect())
+    let mut json_list = String::new();
+    BufReader::new(file).read_to_string(&mut json_list)?;
+    let list = match serde_json::from_str(&json_list) {
+        Ok(result) => { result },
+        Err(_) => { List::new("default".to_string()) },
+    };
+    Ok(list)
 }
 
 /// Write all lines to the default todo file.
-///
-/// # Examples
-/// ```
-/// use cli_todo::list_io::write_file_lines;
-///
-/// let lines = vec!["foo".to_string(), "bar".to_string()];
-/// write_file_lines(&lines).unwrap();
-/// ```
-pub fn write_file_lines(lines: &[String]) -> io::Result<()> {
+pub fn write_file_lines(list: &List) -> io::Result<()> {
     let path = get_file_path();
     let mut file = OpenOptions::new()
         .write(true)
         .create(true)
         .truncate(true)
         .open(path)?;
-    for line in lines {
-        writeln!(file, "{}", line)?;
-    }
+    let json_list = serde_json::to_string(list)?;
+    file.write_all(json_list.as_bytes())?;
     Ok(())
 }

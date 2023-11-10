@@ -32,6 +32,7 @@
 //! ```
 mod arg_parser;
 mod operations;
+mod domain;
 
 use arg_parser::parse_operation;
 

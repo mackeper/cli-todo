@@ -11,3 +11,6 @@ The windows installer is build using [Inno Setup](https://jrsoftware.org/isinfo.
     a. Update the version if needed.
 5. Compile it.
 6. The installer should now be at `targets/release/setup`
+
+### Compile installer via command line
+`. "D:\Program Files (x86)\Inno Setup 6\ISCC.exe" .\setup\setup.iss`
