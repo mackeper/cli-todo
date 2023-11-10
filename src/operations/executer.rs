@@ -16,6 +16,7 @@ pub fn execute(operation: Operation) -> Result<(), OperationError> {
         Operation::List => {}
         Operation::Add { item } => add_item(&mut list, item),
         Operation::Remove { id } => remove_item(&mut list, id)?,
+        Operation::Edit { id, item } => edit_item(&mut list, id, item)?,
         Operation::Done { id } => toggle_done(&mut list, id)?,
         Operation::Clear => list.items.clear(),
     }
@@ -39,6 +40,14 @@ fn remove_item(list: &mut List, id: usize) -> Result<(), OperationError> {
         return Err(OperationError::OutOfRange);
     }
     list.items.remove(id - 1);
+    Ok(())
+}
+
+fn edit_item(list: &mut List, id: usize, item: Item) -> Result<(), OperationError> {
+    if id == 0 || id > list.items.len() {
+        return Err(OperationError::OutOfRange);
+    }
+    list.items[id - 1] = item;
     Ok(())
 }
 
@@ -84,6 +93,22 @@ mod tests {
 
         assert_eq!(list.items.len(), 1);
         assert_eq!(list.items[0].text, "baz".to_string());
+    }
+
+    #[test]
+    fn edit_item() {
+        let mut list = List::new("foo".to_string());
+        list.items.push(Item::new("bar".to_string()));
+        list.items.push(Item::new("baz".to_string()));
+        assert_eq!(list.items.len(), 2);
+        assert_eq!(list.items[0].text, "bar".to_string());
+        assert_eq!(list.items[1].text, "baz".to_string());
+
+        super::edit_item(&mut list, 1, Item::new("qux".to_string())).unwrap();
+
+        assert_eq!(list.items.len(), 2);
+        assert_eq!(list.items[0].text, "qux".to_string());
+        assert_eq!(list.items[1].text, "baz".to_string());
     }
 
     #[test]

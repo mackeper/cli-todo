@@ -48,6 +48,7 @@ fn print_usage(program_name: &str) {
         ("list (l)", "Display all current items."),
         ("add (a) [item]", "Add a new item."),
         ("remove (r) [id]", "Remove an item by its ID."),
+        ("edit (e) [id] [item]", "Edit an item by its ID."),
         ("done (d) [id]", "Toggle its done state by ID."),
         ("clear", "Remove all items."),
     ];

@@ -19,6 +19,24 @@ pub fn parse_operation(op_str: &str, args: &[String]) -> Result<Operation, Parse
             .map_err(|_| ParseError::InvalidArgument)
             .map(|id| Operation::Remove { id }),
 
+        "edit" | "e" => {
+            let id = args
+                .get(0)
+                .ok_or(ParseError::InsufficientArguments)?
+                .parse::<usize>()
+                .map_err(|_| ParseError::InvalidArgument)?;
+
+            let item = args
+                .get(1)
+                .ok_or(ParseError::InsufficientArguments)?
+                .clone();
+
+            Ok(Operation::Edit {
+                id,
+                item: Item::new(item),
+            })
+        }
+
         "done" | "d" => args
             .get(0)
             .ok_or(ParseError::InsufficientArguments)?
