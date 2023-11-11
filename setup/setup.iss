@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "cli-todo"
-#define MyAppVersion "0.1.0-alpha"
+#define MyAppVersion "0.2.0-alpha"
 #define MyAppPublisher "mackeper"
 #define MyAppURL "https://github.com/mackeper/cli-todo"
 #define MyAppExeName "todo.exe"
