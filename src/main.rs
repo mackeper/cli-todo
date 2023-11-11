@@ -30,67 +30,69 @@
 //! $ cli-todo list
 //! 1: [x] Buy oatmilk
 //! ```
-mod arg_parser;
-mod operations;
 mod domain;
+mod operations;
 
-use arg_parser::parse_operation;
+use clap::{Parser, Subcommand};
+use domain::Item;
+use operations::{executer, Operation};
 
-/// Print the usage information for the application.
-///
-/// # Examples
-/// ```
-/// use cli_todo::print_usage;
-/// print_usage("cli-todo");
-/// ```
-fn print_usage(program_name: &str) {
-    let operations = [
-        ("list (l)", "Display all current items."),
-        ("add (a) [item]", "Add a new item."),
-        ("remove (r) [id]", "Remove an item by its ID."),
-        ("edit (e) [id] [item]", "Edit an item by its ID."),
-        ("done (d) [id]", "Toggle its done state by ID."),
-        ("clear", "Remove all items."),
-    ];
-
-    let max_command_length = operations
-        .iter()
-        .map(|(cmd, _)| cmd.len())
-        .max()
-        .unwrap_or(0);
-
-    println!("Usage: {} [operation] [arguments]", program_name);
-    println!("Operations:");
-    for (command, description) in operations {
-        println!(
-            "    {:width$} : {}",
-            command,
-            description,
-            width = max_command_length
-        );
-   }
+#[derive(Parser)]
+#[clap(version)]
+struct Cli {
+    #[command(subcommand)]
+    operation: CliOperations,
 }
 
-/// main parses the command line arguments and executes the requested operation.
-/// If the operation is not recognized, the usage information is printed.
+#[derive(Subcommand)]
+enum CliOperations {
+    /// List all items
+    List,
+
+    /// Add a new item
+    Add {
+        item: String,
+    },
+
+    /// Remove an item by its ID
+    Remove {
+        id: usize,
+    },
+
+    /// Edit an item by its ID
+    Edit {
+        id: usize,
+        item: String,
+    },
+
+    /// Toggle the done state of an item by its ID
+    Done {
+        id: usize,
+    },
+
+    /// Remove all items
+    Clear,
+}
+
 fn main() {
-    let args: Vec<String> = std::env::args().collect();
-    let program_name = &args[0];
+    let cli = Cli::parse();
 
-    if args.len() < 2 {
-        print_usage(program_name);
-        return;
-    }
+    let operation = match cli.operation {
+        CliOperations::List => Operation::List,
+        CliOperations::Add { item } => Operation::Add {
+            item: Item::new(item),
+        },
+        CliOperations::Remove { id } => Operation::Remove { id },
+        CliOperations::Edit { id, item } => Operation::Edit {
+            id,
+            item: Item::new(item),
+        },
+        CliOperations::Done { id } => Operation::Done { id },
+        CliOperations::Clear => Operation::Clear,
+    };
 
-    match parse_operation(&args[1], &args[2..]) {
-        Ok(op) => {
-            if let Err(err) = operations::execute(op) {
-                println!("{}", err);
-            }
-        }
-        Err(err) => {
-            println!("{}", err);
-            print_usage(program_name);
-        }
-    }
+    match executer::execute(operation) {
+        Ok(_) => {}
+        Err(_) => {}
+    };
 }
