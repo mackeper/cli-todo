@@ -8,7 +8,7 @@ pub enum Operation {
     Remove { id: usize },
     Edit { id: usize, item: Item },
     Done { id: usize },
-    Clear,
+    Clear { force: bool },
 }
 
 impl PartialEq for Operation {
@@ -28,7 +28,9 @@ impl PartialEq for Operation {
                 },
             ) => id1 == id2 && item1 == item2,
             (Operation::Done { id: id1 }, Operation::Done { id: id2 }) => id1 == id2,
-            (Operation::Clear, Operation::Clear) => true,
+            (Operation::Clear { force: force1 }, Operation::Clear { force: force2 }) => {
+                force1 == force2
+            }
             _ => false,
         }
     }
@@ -82,7 +84,18 @@ mod tests {
 
     #[test]
     fn eq_clear() {
-        assert_eq!(Operation::Clear, Operation::Clear);
+        assert_eq!(
+            Operation::Clear { force: true },
+            Operation::Clear { force: true }
+        );
+    }
+
+    #[test]
+    fn neq_clear() {
+        assert_ne!(
+            Operation::Clear { force: true },
+            Operation::Clear { force: false }
+        );
     }
 
     #[test]

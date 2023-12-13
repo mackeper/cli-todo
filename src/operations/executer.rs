@@ -18,7 +18,7 @@ pub fn execute(operation: Operation) -> Result<(), OperationError> {
         Operation::Remove { id } => remove_item(&mut list, id)?,
         Operation::Edit { id, item } => edit_item(&mut list, id, item)?,
         Operation::Done { id } => toggle_done(&mut list, id)?,
-        Operation::Clear => list.items.clear(),
+        Operation::Clear { force } => clear_items(&mut list, force),
     }
     list_items(&mut list);
     write_file_lines(&list).map_err(|x| OperationError::IOError(x))?;
@@ -61,9 +61,17 @@ fn toggle_done(list: &mut List, id: usize) -> Result<(), OperationError> {
     Ok(())
 }
 
+fn clear_items(list: &mut List, force: bool) {
+    if force {
+        list.items.clear();
+    } else {
+        list.items.retain(|item| !item.done);
+    }
+}
+
 #[cfg(test)]
 mod tests {
-    use crate::domain::{List, Item};
+    use crate::domain::{Item, List};
 
     #[test]
     fn list_items() {
@@ -148,6 +156,31 @@ mod tests {
 
         assert_eq!(list.items[0].done, false);
         assert_eq!(list.items[1].done, false);
+    }
+
+    #[test]
+    fn clear_items_without_force() {
+        let mut list = List::new("foo".to_string());
+        list.items.push(Item::new("bar".to_string()));
+        list.items.push(Item::new("baz".to_string()));
+        list.items[0].done = true;
+
+        super::clear_items(&mut list, false);
+
+        assert_eq!(list.items.len(), 1);
+        assert_eq!(list.items[0].text, "baz".to_string());
+    }
+
+    #[test]
+    fn clear_items_with_force() {
+        let mut list = List::new("foo".to_string());
+        list.items.push(Item::new("bar".to_string()));
+        list.items.push(Item::new("baz".to_string()));
+        list.items[0].done = true;
+
+        super::clear_items(&mut list, true);
+
+        assert_eq!(list.items.len(), 0);
     }
 
     #[test]

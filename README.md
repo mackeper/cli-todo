@@ -7,7 +7,8 @@ $$ /      $$ |$$ |\______| $$ |    $$ /  $$ |$$ /  $$ |$$ /  $$ |
 $$ |      $$ |$$ |         $$ |$$\ $$ |  $$ |$$ |  $$ |$$ |  $$ |
 \$$$$$$$\ $$ |$$ |         \$$$$  |\$$$$$$  |\$$$$$$$ |\$$$$$$  |
  \_______|\__|\__|          \____/  \______/  \_______| \______/ 
-``` 
+```
+
 <div align="center">
 
 [![Rust](https://github.com/mackeper/cli-todo/actions/workflows/rust.yml/badge.svg)](https://github.com/mackeper/cli-todo/actions/workflows/rust.yml)
@@ -23,11 +24,10 @@ Simple todo list in your command-line :white_check_mark:
 [FAQ](#faq-question) •
 [Support](#support-love_letter)  
 
-
-
 </div>
 
 ## Usage :heart_eyes:
+
 ```
 Usage: todo.exe [operation] [arguments]
 Operations:
@@ -40,24 +40,39 @@ Operations:
 ```
 
 ## Installation :coffee:
+
 ### Windows :computer:
+
 Download the release
 
 ### Linux :penguin:
+
 Coming soon :hourglass_flowing_sand:
 
 ## Development :sparkles:
+
 ### Build :hammer:
+
 ```
 cargo build --release
 ```
-    
+
 ## Roadmap :world_map:
+
 - Maybe support multiple lists :floppy_disk:
+- Sub todo items
+  - E.g: `todo edit 1 -sub "Bread"`
+    - 1 Buy groceries
+      - Bread
+- Clear all done items by default
+  - `todo clear --all/--force` to clear all items
+- Add undo / redo functionality
+- Move this roadmap to GitHub issues / features
 
 ## FAQ :question:
 
 #### Where are the todo lists stored?
+
 - On Windows: `%localappdata%\cli-todo`
 - On Linux: Coming soon
 

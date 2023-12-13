@@ -17,8 +17,8 @@
 //!
 //! # Examples
 //! ```
-//! $ cli-todo add "Buy milk"
-//! $ cli-todo add "Buy eggs"
+//! $ cli-todo add "Buy oatmilk"
+//! $ cli-todo add "Buy kale"
 //! $ cli-todo list
 //! 1: [ ] Buy oatmilk
 //! 2: [ ] Buy kale
@@ -47,31 +47,31 @@ struct Cli {
 #[derive(Subcommand)]
 enum CliOperations {
     /// List all items
+    #[clap(visible_alias = "l")]
     List,
 
     /// Add a new item
-    Add {
-        item: String,
-    },
+    #[clap(visible_alias = "a")]
+    Add { item: String },
 
     /// Remove an item by its ID
-    Remove {
-        id: usize,
-    },
+    #[clap(visible_alias = "r")]
+    Remove { id: usize },
 
     /// Edit an item by its ID
-    Edit {
-        id: usize,
-        item: String,
-    },
+    #[clap(visible_alias = "e")]
+    Edit { id: usize, item: String },
 
     /// Toggle the done state of an item by its ID
-    Done {
-        id: usize,
-    },
+    #[clap(visible_alias = "d")]
+    Done { id: usize },
 
-    /// Remove all items
-    Clear,
+    /// Remove all items that are done
+    Clear {
+        /// Force clear all items
+        #[clap(short, long)]
+        force: bool,
+    },
 }
 
 fn main() {
@@ -88,7 +88,7 @@ fn main() {
             item: Item::new(item),
         },
         CliOperations::Done { id } => Operation::Done { id },
-        CliOperations::Clear => Operation::Clear,
+        CliOperations::Clear { force } => Operation::Clear { force },
     };
 
     match executer::execute(operation) {
