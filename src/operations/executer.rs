@@ -12,22 +12,34 @@ use super::list_io::write_file_lines;
 /// Returns an error if the operation is invalid or if there is an IO error.
 pub fn execute(operation: Operation) -> Result<(), OperationError> {
     let mut list = read_file_lines().map_err(|x| OperationError::IOError(x))?;
+    let mut show_details = false;
     match operation {
-        Operation::List => {}
+        Operation::List { details } => {
+            show_details = details;
+        }
         Operation::Add { item } => add_item(&mut list, item),
         Operation::Remove { id } => remove_item(&mut list, id)?,
         Operation::Edit { id, item } => edit_item(&mut list, id, item)?,
         Operation::Done { id } => toggle_done(&mut list, id)?,
         Operation::Clear { force } => clear_items(&mut list, force),
     }
-    list_items(&mut list);
+    list_items(&mut list, show_details);
     write_file_lines(&list).map_err(|x| OperationError::IOError(x))?;
     Ok(())
 }
 
-fn list_items(list: &mut List) {
+fn list_items(list: &mut List, show_details: bool) {
     for (i, item) in list.items.iter().enumerate() {
-        println!("{}: {}", i + 1, item);
+        if show_details {
+            println!(
+                "{}: {} [{}]",
+                i + 1,
+                item,
+                item.created_at.format("%Y-%m-%d %H:%M:%S")
+            );
+        } else {
+            println!("{}: {}", i + 1, item);
+        }
     }
 }
 
@@ -76,7 +88,7 @@ mod tests {
     #[test]
     fn list_items() {
         let mut list = List::new("foo".to_string());
-        super::list_items(&mut list);
+        super::list_items(&mut list, false);
     }
 
     #[test]
