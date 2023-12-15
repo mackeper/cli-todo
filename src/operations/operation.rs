@@ -3,7 +3,7 @@ use crate::domain::Item;
 /// Operations that can be performed on the todo list.
 #[derive(Debug)]
 pub enum Operation {
-    List,
+    List { details: bool },
     Add { item: Item },
     Remove { id: usize },
     Edit { id: usize, item: Item },
@@ -14,7 +14,9 @@ pub enum Operation {
 impl PartialEq for Operation {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
-            (Operation::List, Operation::List) => true,
+            (Operation::List { details: details1 }, Operation::List { details: details2 }) => {
+                details1 == details2
+            }
             (Operation::Add { item: item1 }, Operation::Add { item: item2 }) => item1 == item2,
             (Operation::Remove { id: id1 }, Operation::Remove { id: id2 }) => id1 == id2,
             (
@@ -43,7 +45,18 @@ mod tests {
 
     #[test]
     fn eq_list() {
-        assert_eq!(Operation::List, Operation::List);
+        assert_eq!(
+            Operation::List { details: true },
+            Operation::List { details: true }
+        );
+    }
+
+    #[test]
+    fn neq_list() {
+        assert_ne!(
+            Operation::List { details: true },
+            Operation::List { details: false }
+        );
     }
 
     #[test]
@@ -101,7 +114,7 @@ mod tests {
     #[test]
     fn ne_list_add() {
         assert_ne!(
-            Operation::List,
+            Operation::List { details: true },
             Operation::Add {
                 item: Item::new("foo".to_string())
             }

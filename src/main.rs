@@ -48,7 +48,11 @@ struct Cli {
 enum CliOperations {
     /// List all items
     #[clap(visible_alias = "l")]
-    List,
+    List {
+        /// Show details
+        #[clap(short, long)]
+        details: bool,
+    },
 
     /// Add a new item
     #[clap(visible_alias = "a")]
@@ -78,7 +82,7 @@ fn main() {
     let cli = Cli::parse();
 
     let operation = match cli.operation {
-        CliOperations::List => Operation::List,
+        CliOperations::List { details } => Operation::List { details: details },
         CliOperations::Add { item } => Operation::Add {
             item: Item::new(item),
         },
